@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Exemplos Spring - Exemplo 12</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Exemplo 12 - Cabeçalhos enviados</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 500px;">Nome cabeçalho</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="cab : ${cabecalhos}">
+                    <td th:text="${cab.key}"></td>
+                    <td th:text="${cab.value}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

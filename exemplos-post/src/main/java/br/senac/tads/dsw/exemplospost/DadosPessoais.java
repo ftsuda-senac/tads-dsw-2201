@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class DadosPessoais {
 
@@ -15,6 +16,7 @@ public class DadosPessoais {
 
     private String descricao;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) // ISO-8601
     private LocalDate dataNascimento;
 
     private String email;

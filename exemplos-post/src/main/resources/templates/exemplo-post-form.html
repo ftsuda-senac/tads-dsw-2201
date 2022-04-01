@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Exemplo POST - Form</h1>
+        <form method="post" th:action="@{/exemplos/post}">
+            <div>
+                <label>Senha</label>
+                <input type="password" name="senha" />
+            </div>
+            <div>
+                <label>Número CC</label>
+                <input type="text" name="cc" />
+            </div>
+            <div>
+                <label>Cód. Verif.</label>
+                <input type="number" name="codver" />
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+    </body>
+</html>

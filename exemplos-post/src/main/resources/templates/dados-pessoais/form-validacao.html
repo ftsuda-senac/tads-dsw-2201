@@ -16,93 +16,100 @@
         <div class="row">
             <section class="col-md-12">
                 <h1>Formulário</h1>
-                <form method="post" th:action="@{/dados-pessoais/salvar-com-post-redirect-get}" novalidate>
+                <form method="post" th:action="@{/dados-pessoais/salvar-com-post-redirect-get-validacao}" novalidate th:object="${dados}">
 
                     <input type="hidden" name="id" value="123" />
 
                     <div class="row mb-3">
                         <label for="txtNome" class="col-sm-2 col-form-label">Nome</label>
                         <div class="col-sm-10">
-                            <input type="text" name="nome" class="form-control" id="txtNome" placeholder="Nome" 
-                                   maxlength="100" required />
+                            <input type="text" name="nome" class="form-control" id="txtNome" 
+                                   th:classappend="${#fields.hasErrors('nome')}? is-invalid"
+                                   placeholder="Nome" maxlength="100" required th:field="*{nome}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
                         </div>
                     </div>
 
                     <div class="row mb-3">
                         <label for="txtDescricao" class="col-sm-2 col-form-label">Descrição</label>
                         <div class="col-sm-10">
-                            <textarea name="descricao" class="form-control" id="txtDescricao" placeholder="Descrição" maxlength="1000"></textarea>
+                            <textarea name="descricao" class="form-control" id="txtDescricao" placeholder="Descrição" maxlength="1000" th:field="*{descricao}"></textarea>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="txtDataNascimento" class="col-sm-2 col-form-label">Data de nascimento</label>
                         <div class="col-sm-10">
-                            <input type="date" name="dataNascimento" class="form-control" id="txtDataNascimento" required />
+                            <input type="date" name="dataNascimento" class="form-control" id="txtDataNascimento" 
+                                   th:classappend="${#fields.hasErrors('dataNascimento')}? is-invalid" required th:field="*{dataNascimento}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('dataNascimento')}" th:errors="*{dataNascimento}"></div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="txtEmail" class="col-sm-2 col-form-label">E-mail</label>
                         <div class="col-sm-10">
-                            <input type="email" name="email" class="form-control" id="txtEmail" placeholder="E-mail" required />
+                            <input type="email" name="email" class="form-control" 
+                                   th:classappend="${#fields.hasErrors('email')}? is-invalid" id="txtEmail" placeholder="E-mail" required th:field="*{email}"/>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="txtTelefone" class="col-sm-2 col-form-label">Telefone</label>
                         <div class="col-sm-10">
                             <input type="text" name="telefone" class="form-control" id="txtTelefone"
-                                placeholder="Formato (99) 99999-9999" />
+                                placeholder="Formato (99) 99999-9999" 
+                                th:field="*{telefone}"/>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="txtSenha" class="col-sm-2 col-form-label">Senha</label>
                         <div class="col-sm-10">
-                            <input type="password" name="senha" class="form-control" id="txtSenha" placeholder="Senha" />
+                            <input type="password" name="senha" class="form-control" id="txtSenha" placeholder="Senha" th:field="*{senha}" />
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="txtSenhaRepetida" class="col-sm-2 col-form-label">Repetir senha</label>
                         <div class="col-sm-10">
-                            <input type="password" name="senhaRepetida" class="form-control" id="txtSenhaRepetida" placeholder="Repetir senha" />
+                            <input type="password" name="senhaRepetida" class="form-control" id="txtSenhaRepetida" placeholder="Repetir senha" th:field="*{senhaRepetida}" />
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="txtNumero" class="col-sm-2 col-form-label">Número de 1 a 99</label>
                         <div class="col-sm-10">
                             <input type="number" name="numero" class="form-control" id="txtNumero" min="1" max="99"
-                                placeholder="Número de 1 a 99" />
+                                placeholder="Número de 1 a 99" th:field="*{numero}"  />
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="txtAltura" class="col-sm-2 col-form-label">Altura</label>
                         <div class="col-sm-10">
                             <input type="number" name="altura" class="form-control" id="txtAltura" min="0" step="0.01"
-                                placeholder="Altura em metros com no máximo 2 casa decimais" />
+                                placeholder="Altura em metros com no máximo 2 casa decimais" th:field="*{altura}" />
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="txtPeso" class="col-sm-2 col-form-label">Peso</label>
                         <div class="col-sm-10">
                             <input type="number" name="peso" class="form-control" id="txtPeso" min="0" step="0.1"
-                                placeholder="Peso em Kg com no máximo 1 casa decimal" />
+                                placeholder="Peso em Kg com no máximo 1 casa decimal" th:field="*{peso}" />
                         </div>
                     </div>
                     <fieldset class="row mb-3">
                         <legend class="col-form-label col-sm-2 pt-0">Gênero</legend>
                         <div class="col-sm-10">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="genero" id="generoI" value="-1" checked />
+                                <input class="form-check-input" type="radio" name="genero" id="generoI" value="-1" th:field="*{genero}" checked />
                                 <label class="form-check-label" for="generoF">Indefinido</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="genero" id="generoF" value="0" />
+                                <input class="form-check-input" type="radio" name="genero" id="generoF" value="0" th:field="*{genero}" />
                                 <label class="form-check-label" for="generoF">Feminino</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="genero" id="generoM" value="1" />
+                                <input class="form-check-input" type="radio" name="genero" id="generoM" value="1" th:field="*{genero}" />
                                 <label class="form-check-label" for="generoM">Masculino</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="genero" id="generoO" value="2" />
+                                <input class="form-check-input" type="radio" name="genero" id="generoO" value="2" th:field="*{genero}" />
                                 <label class="form-check-label" for="generoO">Outro</label>
                             </div>
                         </div>
@@ -111,31 +118,31 @@
                         <legend class="col-form-label col-sm-2 pt-0">Interesses</legend>
                         <div class="col-sm-10">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesTecnologia" value="Tecnologia" />
+                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesTecnologia" value="Tecnologia" th:field="*{interesses}" />
                                 <label class="form-check-label" for="interessesTecnologia">
                                     Tecnologia
                                 </label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesGastronomia" value="Gastronomia" />
+                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesGastronomia" value="Gastronomia" th:field="*{interesses}" />
                                 <label class="form-check-label" for="interessesGastronomia">
                                     Gastronomia
                                 </label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesViagens" value="Viagens" />
+                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesViagens" value="Viagens" th:field="*{interesses}" />
                                 <label class="form-check-label" for="interessesViagens">
                                     Viagens
                                 </label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesInvestimentos" value="Investimentos" />
+                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesInvestimentos" value="Investimentos" th:field="*{interesses}" />
                                 <label class="form-check-label" for="interessesInvestimentos">
                                     Investimentos
                                 </label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesEsportes" value="Esportes" />
+                                <input class="form-check-input" type="checkbox" name="interesses" id="interessesEsportes" value="Esportes" th:field="*{interesses}" />
                                 <label class="form-check-label" for="interessesEsportes">
                                     Esportes
                                 </label>

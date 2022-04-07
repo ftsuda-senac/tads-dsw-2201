@@ -40,7 +40,7 @@ public class ExemploSessaoController1 {
     public ModelAndView adicionarItem(@ModelAttribute("itemId") Integer itemId,
             List<ItemSelecionado> itensSelecionados, RedirectAttributes redirAttr, HttpServletRequest servletReq) {
         Item item = itemService.findById(itemId);
-        itensSelecionados.add(new ItemSelecionado(item, servletReq.getHeader("user-agent")));
+        itensSelecionados.add(new ItemSelecionado(item, servletReq.getHeader("user-agent"), servletReq.getRemoteAddr()));
         redirAttr.addFlashAttribute("msg", "Item ID " + item.getId() + " adicionado com sucesso");
         return new ModelAndView("redirect:/exemplo-sessao1");
     }

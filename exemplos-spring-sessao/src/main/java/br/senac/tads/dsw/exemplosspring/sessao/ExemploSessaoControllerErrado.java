@@ -38,7 +38,7 @@ public class ExemploSessaoControllerErrado implements Serializable {
     public ModelAndView adicionarItem(@ModelAttribute("itemId") Integer itemId,
             RedirectAttributes redirAttr, HttpServletRequest servletReq) {
         Item item = itemService.findById(itemId);
-        itensSelecionados.add(new ItemSelecionado(item, servletReq.getHeader("user-agent")));
+        itensSelecionados.add(new ItemSelecionado(item, servletReq.getHeader("user-agent"), servletReq.getRemoteAddr()));
         redirAttr.addFlashAttribute("msg", "Item ID " + item.getId() + " adicionado com sucesso");
         return new ModelAndView("redirect:/exemplo-sessao-errado");
     }

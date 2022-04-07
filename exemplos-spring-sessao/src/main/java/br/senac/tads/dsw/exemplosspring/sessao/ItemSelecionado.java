@@ -21,15 +21,18 @@ public class ItemSelecionado implements Serializable {
     private LocalDateTime dataHoraInclusao;
 
     private String userAgent;
+    
+    private String ipAddress;
 
     public ItemSelecionado() {
 
     }
 
-    public ItemSelecionado(Item item, String userAgent) {
+    public ItemSelecionado(Item item, String userAgent, String ipAddress) {
         this.item = item;
         this.dataHoraInclusao = LocalDateTime.now();
         this.userAgent = userAgent;
+        this.ipAddress = ipAddress;
     }
 
     public Item getItem() {
@@ -54,5 +57,13 @@ public class ItemSelecionado implements Serializable {
 
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 }

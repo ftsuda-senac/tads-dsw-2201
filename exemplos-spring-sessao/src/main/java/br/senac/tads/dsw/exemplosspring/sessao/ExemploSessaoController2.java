@@ -1,6 +1,9 @@
+/*
+ * To change this license header, choose License Headers in Project Properties. To change this
+ * template file, choose Tools | Templates and open the template in the editor.
+ */
 package br.senac.tads.dsw.exemplosspring.sessao;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -14,25 +17,19 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.senac.tads.dsw.exemplosspring.sessao.item.Item;
 import br.senac.tads.dsw.exemplosspring.sessao.item.ItemService;
+import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
-@RequestMapping("/exemplo-sessao-errado")
-public class ExemploSessaoControllerErrado implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@RequestMapping("/exemplo-sessao2")
+public class ExemploSessaoController2 {
 
     @Autowired
     private ItemService itemService;
 
-    // NÃO COLOCAR ATRIBUTO DE INSTÂNCIA NOS CONTROLLERS POIS PODE CAUSAR
-    // COMPORTAMENTO ERRADO DA APLICAÇÃO.
-    // O OBJETO CONTROLLER PODE SER COMPARTILHADO ENTRE REQUISICOES DIFERENTES.
-    private List<ItemSelecionado> itensSelecionados = new ArrayList<>();
-
     @GetMapping
     public ModelAndView mostrarTela() {
-        return new ModelAndView("exemplo-sessao-errado")
-                .addObject("itens", itemService.findAll());
+        return new ModelAndView("exemplo-sessao2").addObject("itens", itemService.findAll());
     }
 
     @PostMapping
@@ -41,33 +38,40 @@ public class ExemploSessaoControllerErrado implements Serializable {
             RedirectAttributes redirAttr,
             HttpServletRequest servletReq
     ) {
+        HttpSession sessao = servletReq.getSession();
+        if (sessao.getAttribute("itensSelecionados2") == null) {
+            sessao.setAttribute("itensSelecionados2", new ArrayList<ItemSelecionado>());
+        }
+        List<ItemSelecionado> itensSelecionados = 
+                (ArrayList<ItemSelecionado>) sessao.getAttribute("itensSelecionados2");
+        
         Item item = itemService.findById(itemId);
         itensSelecionados.add(
                 new ItemSelecionado(item,
                         servletReq.getHeader("user-agent"),
                         servletReq.getRemoteAddr()));
         redirAttr.addFlashAttribute("msg", "Item ID " + item.getId() + " adicionado com sucesso");
-        return new ModelAndView("redirect:/exemplo-sessao-errado");
+        return new ModelAndView("redirect:/exemplo-sessao2");
     }
 
     @GetMapping("/limpar")
-    public ModelAndView limparSessao(RedirectAttributes redirAttr) {
-        itensSelecionados.clear();
+    public ModelAndView limparSessao(
+            HttpServletRequest servletReq,
+            RedirectAttributes redirAttr) {
+        HttpSession sessao = servletReq.getSession();
+        if (sessao.getAttribute("itensSelecionados2") != null) {
+            List<ItemSelecionado> itensSelecionados =
+                    (ArrayList<ItemSelecionado>) sessao.getAttribute("itensSelecionados2");
+            itensSelecionados.clear();
+        }
+        
         redirAttr.addFlashAttribute("msg", "Itens removidos");
-        return new ModelAndView("redirect:/exemplo-sessao-errado");
-    }
-
-    @ModelAttribute("itensSelecionados")
-    public List<ItemSelecionado> getItensSelecionados() {
-        return itensSelecionados;
-    }
-
-    public void setItensSelecionados(List<ItemSelecionado> itensSelecionados) {
-        this.itensSelecionados = itensSelecionados;
+        return new ModelAndView("redirect:/exemplo-sessao2");
     }
 
     @ModelAttribute("titulo")
     public String getTitulo() {
-        return "Exemplo Sessao ERRADO";
+        return "Exemplo Sessao 2 - Uso do HttpSession/HttpServletRequest";
     }
+
 }

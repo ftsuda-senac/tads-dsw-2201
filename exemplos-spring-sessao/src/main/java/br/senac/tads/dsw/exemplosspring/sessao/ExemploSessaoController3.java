@@ -14,24 +14,23 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.senac.tads.dsw.exemplosspring.sessao.item.Item;
 import br.senac.tads.dsw.exemplosspring.sessao.item.ItemService;
+import org.springframework.context.annotation.Scope;
 
 @Controller
-@RequestMapping("/exemplo-sessao-errado")
-public class ExemploSessaoControllerErrado implements Serializable {
+@Scope("session")
+@RequestMapping("/exemplo-sessao3")
+public class ExemploSessaoController3 implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Autowired
     private ItemService itemService;
 
-    // NÃO COLOCAR ATRIBUTO DE INSTÂNCIA NOS CONTROLLERS POIS PODE CAUSAR
-    // COMPORTAMENTO ERRADO DA APLICAÇÃO.
-    // O OBJETO CONTROLLER PODE SER COMPARTILHADO ENTRE REQUISICOES DIFERENTES.
     private List<ItemSelecionado> itensSelecionados = new ArrayList<>();
 
     @GetMapping
     public ModelAndView mostrarTela() {
-        return new ModelAndView("exemplo-sessao-errado")
+        return new ModelAndView("exemplo-sessao3")
                 .addObject("itens", itemService.findAll());
     }
 
@@ -47,17 +46,16 @@ public class ExemploSessaoControllerErrado implements Serializable {
                         servletReq.getHeader("user-agent"),
                         servletReq.getRemoteAddr()));
         redirAttr.addFlashAttribute("msg", "Item ID " + item.getId() + " adicionado com sucesso");
-        return new ModelAndView("redirect:/exemplo-sessao-errado");
+        return new ModelAndView("redirect:/exemplo-sessao3");
     }
 
     @GetMapping("/limpar")
     public ModelAndView limparSessao(RedirectAttributes redirAttr) {
         itensSelecionados.clear();
         redirAttr.addFlashAttribute("msg", "Itens removidos");
-        return new ModelAndView("redirect:/exemplo-sessao-errado");
+        return new ModelAndView("redirect:/exemplo-sessao3");
     }
 
-    @ModelAttribute("itensSelecionados")
     public List<ItemSelecionado> getItensSelecionados() {
         return itensSelecionados;
     }
@@ -68,6 +66,6 @@ public class ExemploSessaoControllerErrado implements Serializable {
 
     @ModelAttribute("titulo")
     public String getTitulo() {
-        return "Exemplo Sessao ERRADO";
+        return "Exemplo Sessao 3 - Uso do @Controller com @Scope(\"session\")";
     }
 }

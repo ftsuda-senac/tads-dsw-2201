@@ -17,7 +17,7 @@ import br.senac.tads.dsw.exemplosspring.sessao.item.ItemService;
  * @author ftsuda
  */
 @Controller
-@RequestMapping("/layout-dialect")
+@RequestMapping("/com-layout")
 public class LayoutDialectController {
 
     @Autowired

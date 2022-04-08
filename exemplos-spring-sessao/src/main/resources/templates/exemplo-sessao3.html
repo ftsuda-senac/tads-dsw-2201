@@ -44,6 +44,11 @@
       </div>
     </div>
     <hr>
+    <div class="row">
+        <div class="col-12">
+            <p><code>jsessionid: <b th:text="${#session.id}":></b></code> (Ver cookie pela ferramenta de desenvolvedor do navegador)<p>
+        </div>
+    </div>
     <div class="row" th:if="${#lists.isEmpty(@exemploSessaoController3.itensSelecionados)}">
       <div class="col-12">
         <h2>Nenhum item adicionado</h2>

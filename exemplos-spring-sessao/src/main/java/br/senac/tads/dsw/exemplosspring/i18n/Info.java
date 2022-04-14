@@ -18,15 +18,15 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
  */
 public class Info {
 
-    @NotBlank(message = "O nome deve ser preenchido")
+    @NotBlank(message = "{form.nome.erro.blank}")
     private String nome;
 
-    @NotBlank(message = "O e-mail deve ser preenchido")
-    @Email(message = "O e-mail digitado é inválido")
+    @NotBlank(message = "{form.email.erro.blank}")
+    @Email(message = "{form.email.erro.invalid}")
     private String email;
 
-    @DateTimeFormat(iso = ISO.DATE_TIME)
-    @Past(message = "A data de nascimento não está no passado")
+    @DateTimeFormat(iso = ISO.DATE)
+    @Past(message = "{form.dtNascimento.erro.past}")
     private LocalDate dtNascimento;
 
     public String getNome() {

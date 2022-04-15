@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" th:href="@{/css/estilos.css}" />
+  <script>
+    const dadosPessoaisJSON = `{
+      "nome": "Fernando Tsuda",
+      "dtNascimento": "01/01/1982",
+      "telefone": "(11) 99999-1234",
+      "email": "fernando.tsuda@sp.senac.br",
+      "imgUrl": "../img/avatar-placeholder.png",
+      "linkedinUrl": "https://br.linkedin.com/in/ftsuda",
+      "githubUrl": "https://github.com/ftsuda-senac"
+    }`
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('btnCarregar').addEventListener('click', function() {
+        let dados = JSON.parse(dadosPessoaisJSON)
+        document.getElementsByTagName("title")[0].innerHTML = dados.nome + ' - Dados pessoais'
+        document.getElementById('nome').innerHTML = dados.nome
+        document.getElementById('dtNascimento').innerHTML = 'Data de nascimento: ' + dados.dtNascimento
+        document.getElementById('telefone').innerHTML = 'Telefone: ' + dados.telefone
+        document.getElementById('email').innerHTML = 'E-mail: ' + dados.email
+        document.getElementById('linkedin').innerHTML = 'LinkedIn: <a href="' + dados.linkedinUrl + '">' +  dados.linkedinUrl + '</a>'
+        document.getElementById('github').innerHTML = 'Github: <a href="' + dados.githubUrl + '">' +  dados.githubUrl + '</a>'
+        document.getElementById('imgProfile').src = dados.imgUrl
+      })
+    })
+
+  </script>
+</head>
+
+<body>
+  <button id="btnCarregar">Carregar dados via JS</button>
+  <main>
+    <header>
+      <h1 id="nome"></h1>
+    </header>
+    <section class="dados-contato">
+      <div>
+        <img src="" id="imgProfile" title="Foto do perfil" data-qualquer-coisa="Xpto" />
+      </div>
+      <div>
+        <p id="telefone"></p>
+        <p id="email"></p>
+        <p id="dtNascimento"></p>
+        <p id="linkedin"></p>
+        <p id="github"></p>
+      </div>
+    </section>
+
+  </main>
+</body>
+
+</html>

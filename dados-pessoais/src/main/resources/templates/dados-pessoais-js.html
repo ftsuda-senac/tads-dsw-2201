@@ -6,28 +6,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title></title>
   <link rel="stylesheet" th:href="@{/css/estilos.css}" />
-  <script>
-    const dadosPessoaisJSON = `{
-      "nome": "Fernando Tsuda",
-      "dtNascimento": "01/01/1982",
-      "telefone": "(11) 99999-1234",
-      "email": "fernando.tsuda@sp.senac.br",
-      "imgUrl": "../img/avatar-placeholder.png",
-      "linkedinUrl": "https://br.linkedin.com/in/ftsuda",
-      "githubUrl": "https://github.com/ftsuda-senac"
-    }`
+  <script th:inline="javascript">
     
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('btnCarregar').addEventListener('click', function() {
-        let dados = JSON.parse(dadosPessoaisJSON)
-        document.getElementsByTagName("title")[0].innerHTML = dados.nome + ' - Dados pessoais'
-        document.getElementById('nome').innerHTML = dados.nome
-        document.getElementById('dtNascimento').innerHTML = 'Data de nascimento: ' + dados.dtNascimento
-        document.getElementById('telefone').innerHTML = 'Telefone: ' + dados.telefone
-        document.getElementById('email').innerHTML = 'E-mail: ' + dados.email
-        document.getElementById('linkedin').innerHTML = 'LinkedIn: <a href="' + dados.linkedinUrl + '">' +  dados.linkedinUrl + '</a>'
-        document.getElementById('github').innerHTML = 'Github: <a href="' + dados.githubUrl + '">' +  dados.githubUrl + '</a>'
-        document.getElementById('imgProfile').src = dados.imgUrl
+          
+	const xhr = new XMLHttpRequest();
+	xhr.open('GET', '[(@{/dados})]', true);
+
+	// xhr.addEventListener('load', function() { ... });
+	xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                let dados = JSON.parse(xhr.responseText);
+                document.getElementsByTagName("title")[0].innerHTML = dados.nome + ' - Dados pessoais'
+                document.getElementById('nome').innerHTML = dados.nome
+                document.getElementById('dtNascimento').innerHTML = 'Data de nascimento: ' + dados.dtNascimento
+                document.getElementById('telefone').innerHTML = 'Telefone: ' + dados.telefone
+                document.getElementById('email').innerHTML = 'E-mail: ' + dados.email
+                document.getElementById('linkedin').innerHTML = 'LinkedIn: <a href="' + dados.linkedinUrl + '">' +  dados.linkedinUrl + '</a>'
+                document.getElementById('github').innerHTML = 'Github: <a href="' + dados.githubUrl + '">' +  dados.githubUrl + '</a>'
+                document.getElementById('imgProfile').src = '[(@{/img/avatar-placeholder.png})]'
+            }
+	};
+	xhr.send();
+
       })
     })
 

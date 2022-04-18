@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -56,6 +57,20 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //    public void addInterceptors(InterceptorRegistry registry) {
 //        registry.addInterceptor(localeChangeInterceptor());
 //    }
+    
+    
+    /**
+     * Define uma URL para acessar um diretório contendo as imagens<br>
+     * Criar o diretório configurado no sistema.<br>
+     * Referência: https://www.baeldung.com/spring-mvc-static-resources
+     *
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/arquivos-upload/**")
+                .addResourceLocations("file:///C:/senac/servidor-upload/");
+    }
 
 
 

@@ -1,20 +1,41 @@
 package br.senac.tads.dsw.exemplosspring.pessoas;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+@Entity
 public class FotoPessoa {
 
+    @Id
+    @SequenceGenerator(name = "seq_fotopessoa_id",
+            sequenceName = "seq_fotopessoa_id",
+            allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "seq_fotopessoa_id")
     private Integer id;
 
     @NotBlank
     @Size(max = 500)
     // NAO PODE REPETIR
+    @Column(unique = true)
     private String nomeArquivo;
 
     @Size(max = 1000)
     private String legenda;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pessoa_id") // FK
     private DadosPessoais pessoa;
     
     public FotoPessoa() {

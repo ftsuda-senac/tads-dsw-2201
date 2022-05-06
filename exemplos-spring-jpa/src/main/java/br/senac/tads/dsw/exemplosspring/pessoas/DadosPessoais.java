@@ -8,6 +8,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
@@ -20,9 +32,18 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
+@Entity
 // OBS: NOME DA TABELA NO BANCO DEVE SER "PESSOA"
+@Table(name = "pessoa")
 public class DadosPessoais {
 
+    @Id
+    @SequenceGenerator(name = "seq_pessoa_id",
+            sequenceName = "seq_pessoa_id",
+            allocationSize = 1,
+            initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "seq_pessoa_id")
     private Integer id;
 
     @NotBlank
@@ -32,6 +53,7 @@ public class DadosPessoais {
     @NotBlank
     @Size(max = 100)
     // NAO PODE REPETIR
+    @Column(unique = true)
     private String apelido;
 
     @Size(max = 1000)
@@ -58,6 +80,7 @@ public class DadosPessoais {
 
     @Min(1)
     @Max(99)
+    @Column(columnDefinition = "tinyint")
     private int numero;
 
     @Min(0)
@@ -74,10 +97,20 @@ public class DadosPessoais {
     //  0 - FEMININO
     //  1 - MASCULINO
     //  2 - OUTRO
+    @Column(columnDefinition = "tinyint")
     private int genero = -1;
 
+     // Usando Set ("tipo de List/ArrayList") que evita objetos repetidos
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "pessoa_interesse",
+            joinColumns = @JoinColumn(name = "pessoa_id"),
+            inverseJoinColumns = @JoinColumn(name = "interesse_id"))
     private Set<Interesse> interesses;
 
+    // "pessoa" é o nome do atributo na classe FotoPessoa
+    // onde o @ManyToOne foi configurado - associação bidirecional
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pessoa")
+    // Usando Set ("tipo de List/ArrayList") que evita objetos repetidos
     private Set<FotoPessoa> fotos;
 
     private boolean cadastroAtivo;

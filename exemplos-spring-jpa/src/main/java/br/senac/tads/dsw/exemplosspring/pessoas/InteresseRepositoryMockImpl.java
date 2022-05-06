@@ -8,8 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
-@Repository
-@Primary
+//@Repository
+//@Primary
 public class InteresseRepositoryMockImpl implements InteresseRepository {
 
     private Map<Integer, Interesse> mapItens;

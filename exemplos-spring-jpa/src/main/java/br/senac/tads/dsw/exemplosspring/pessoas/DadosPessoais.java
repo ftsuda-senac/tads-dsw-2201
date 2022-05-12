@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -35,6 +36,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 // OBS: NOME DA TABELA NO BANCO DEVE SER "PESSOA"
 @Table(name = "pessoa")
+@NamedQuery(name = "DadosPessoais.findAll", query = "SELECT dp FROM DadosPessoais dp")
+@NamedQuery(name = "DadosPessoais.findById", query = "SELECT dp FROM DadosPessoais dp WHERE dp.id = :idPessoa")
 public class DadosPessoais {
 
     @Id

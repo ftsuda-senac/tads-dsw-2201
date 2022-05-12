@@ -38,6 +38,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "pessoa")
 @NamedQuery(name = "DadosPessoais.findAll", query = "SELECT dp FROM DadosPessoais dp")
 @NamedQuery(name = "DadosPessoais.findById", query = "SELECT dp FROM DadosPessoais dp WHERE dp.id = :idPessoa")
+@NamedQuery(name = "DadosPessoais.findByIdComJoinFetch", query =
+        "SELECT dp FROM DadosPessoais dp LEFT JOIN FETCH dp.interesses LEFT JOIN FETCH dp.fotos WHERE dp.id = :idPessoa")
 public class DadosPessoais {
 
     @Id

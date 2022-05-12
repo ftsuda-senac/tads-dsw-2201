@@ -2,6 +2,7 @@ package br.senac.tads.dsw.exemplosspring.pessoas;
 
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -33,8 +34,7 @@ public class DadosPessoaisRepositoryJpaImpl implements DadosPessoaisRepository {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Optional<DadosPessoais> findById(Integer id) {
+    public Optional<DadosPessoais> findByIdSemEntityGraph(Integer id) {
 //        TypedQuery<DadosPessoais> jpqlQuery = em.createQuery(
 //                "SELECT dp FROM DadosPessoais dp WHERE dp.id = :idPessoa", 
 //                DadosPessoais.class);
@@ -42,6 +42,24 @@ public class DadosPessoaisRepositoryJpaImpl implements DadosPessoaisRepository {
                 "DadosPessoais.findById", 
                 DadosPessoais.class);
         jpqlQuery.setParameter("idPessoa", id);
+        DadosPessoais resultado = jpqlQuery.getSingleResult();
+        return Optional.ofNullable(resultado);
+    }
+    
+    @Override
+    public Optional<DadosPessoais> findById(Integer id) {
+        // Versão alterada para usar entityGraph
+        // Para testar corretamente, alterar o application.properties para deixar
+        // propriedade spring.jpa.open-in-view=false
+        EntityGraph<DadosPessoais> entityGraph = em.createEntityGraph(DadosPessoais.class);
+        entityGraph.addAttributeNodes("interesses","fotos");
+        TypedQuery<DadosPessoais> jpqlQuery = em.createNamedQuery(
+                "DadosPessoais.findById", 
+                DadosPessoais.class);
+        jpqlQuery.setParameter("idPessoa", id);
+        // javax.persistence.loadgraph -> Campos que são retornados são adicionados ao Fetch padrão
+        // javax.persistence.fetchgraph -> Campos que são retornados devem ser explicitados
+        jpqlQuery.setHint("javax.persistence.loadgraph", entityGraph);
         DadosPessoais resultado = jpqlQuery.getSingleResult();
         return Optional.ofNullable(resultado);
     }

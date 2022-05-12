@@ -7,6 +7,7 @@ import br.senac.tads.dsw.exemplosspring.pessoas.Interesse;
 import br.senac.tads.dsw.exemplosspring.pessoas.InteresseRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -87,11 +88,17 @@ public class DadosPessoaisService {
         }
         // OBS: Trecho abaixo pode ser substituido pelos handlers @PrePersist
         // e/ou @PreMerge na classe de entidade
+        Set<DadosPessoais> pessoas = new HashSet<>();
+        pessoas.add(dados);
+        
         Set<Interesse> interesses = new LinkedHashSet<>();
         for (Integer interesseId : dados.getInteressesIds()) {
             Optional<Interesse> optInteresse = interesseRepository.findById(interesseId);
             if (optInteresse.isPresent()) {
-                interesses.add(optInteresse.get());
+                Interesse interesse = optInteresse.get();
+                // Mapeamento bidirecional
+                interesse.setPessoas(pessoas);
+                interesses.add(interesse);
             }
         }
         dados.setInteresses(interesses);

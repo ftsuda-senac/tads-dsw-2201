@@ -124,7 +124,7 @@ public class DadosPessoais {
 
     // NAO SALVAR DADOS ABAIXO - Utilitarios para funcionamento do cadastro
     @Transient
-    @NotEmpty
+    //@NotEmpty
     private List<Integer> interessesIds;
 
     @Transient

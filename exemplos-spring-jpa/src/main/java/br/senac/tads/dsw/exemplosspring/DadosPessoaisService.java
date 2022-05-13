@@ -79,7 +79,9 @@ public class DadosPessoaisService {
                 arquivoFoto = dados.getArquivoFoto();
             }
             Set<FotoPessoa> fotos = new LinkedHashSet<>();
-            fotos.add(new FotoPessoa(arquivoFoto, "Foto de " + dados.getNome()));
+            FotoPessoa foto = new FotoPessoa(arquivoFoto, "Foto de " + dados.getNome());
+            foto.setPessoa(dados);
+            fotos.add(foto);
             dados.setFotos(fotos);
 
             dados.setDataCadastro(LocalDateTime.now());

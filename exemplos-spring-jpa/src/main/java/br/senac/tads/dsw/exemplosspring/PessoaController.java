@@ -22,7 +22,7 @@ public class PessoaController {
 
     @GetMapping
     public ModelAndView visualizarLista(@RequestParam(value = "bgvideo", defaultValue = "0") int bgVideo) {
-        List<DadosPessoais> resultados = service.findAll(0, 1000);
+        List<DadosPessoais> resultados = service.findAll(0, 1000, null);
         ModelAndView mv = new ModelAndView(bgVideo == 1 ? "pessoas/visualizacao-lista-video" : "pessoas/visualizacao-lista");
         mv.addObject("dadosLista", resultados);
         return mv;

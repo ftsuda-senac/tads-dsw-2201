@@ -1,14 +1,9 @@
 package br.senac.tads.dsw.exemplosspring.pessoas;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface InteresseRepository {
-
-    List<Interesse> findAll();
-
-    Optional<Interesse> findById(Integer id);
-
-    Interesse save(Interesse interesse);
+@Repository
+public interface InteresseRepository extends JpaRepository<Interesse, Integer> {
 
 }

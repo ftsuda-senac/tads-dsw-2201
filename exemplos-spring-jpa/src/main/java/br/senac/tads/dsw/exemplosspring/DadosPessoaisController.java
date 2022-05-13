@@ -36,7 +36,7 @@ public class DadosPessoaisController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "qtde", defaultValue = "300") int qtde,
             @RequestParam(name = "interessesIds", required = false) List<Integer> interessesIds) {
-        List<DadosPessoais> resultados = service.findAll(page, qtde);
+        List<DadosPessoais> resultados = service.findAll(page, qtde, interessesIds);
         ModelAndView mv = new ModelAndView("pessoas/lista");
         mv.addObject("dadosLista", resultados);
         return mv;
@@ -56,6 +56,21 @@ public class DadosPessoaisController {
         Optional<DadosPessoais> optPessoa = service.findById(id);
         if (!optPessoa.isPresent()) {
             redirAttr.addFlashAttribute("msgErro", "Pessoa com ID " + id + " não encontrada");
+            return new ModelAndView("redirect:/pessoas");
+        }
+        ModelAndView mv = new ModelAndView("pessoas/visualizacao");
+        mv.addObject("dados", optPessoa.get());
+        // mv.addObject("imagemUrlPrefix", imagemUrlPrefix);
+        return mv;
+    }
+    
+    @GetMapping("/{apelido}")
+    public ModelAndView visualizarPorApelido(
+            @PathVariable("apelido") String apelido,
+            RedirectAttributes redirAttr) {
+        Optional<DadosPessoais> optPessoa = service.findByApelido(apelido);
+        if (!optPessoa.isPresent()) {
+            redirAttr.addFlashAttribute("msgErro", "Pessoa com apelido " + apelido + " não encontrada");
             return new ModelAndView("redirect:/pessoas");
         }
         ModelAndView mv = new ModelAndView("pessoas/visualizacao");

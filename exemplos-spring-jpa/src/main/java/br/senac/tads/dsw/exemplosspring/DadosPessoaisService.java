@@ -11,6 +11,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,8 +27,36 @@ public class DadosPessoaisService {
         this.interesseRepository = interesseRepository;
     }
 
-    public List<DadosPessoais> findAll(int page, int qtde) {
-        return dadosPessoaisRepository.findAll(page, qtde);
+    public List<DadosPessoais> findAll(int page, int qtde, List<Integer> interessesIds) {
+        if (interessesIds != null && !interessesIds.isEmpty()) {
+            return dadosPessoaisRepository.findByInteresses(interessesIds);
+        } else {
+            Page<DadosPessoais> paginaDados = dadosPessoaisRepository.findAll(PageRequest.of(page, qtde));
+            return paginaDados.getContent();
+        }
+
+    }
+    
+    public Optional<DadosPessoais> findByApelido(String apelido) {
+        Optional<DadosPessoais> optDados = dadosPessoaisRepository.findByApelidoSQL(apelido);
+        if (optDados.isPresent()) {
+            // OBS: Trecho abaixo pode ser substituido pelo handler @PostLoad na classe de entidade
+            DadosPessoais dados = optDados.get();
+            List<Integer> interessesIds = new ArrayList<>();
+            for (Interesse interesse : dados.getInteresses()) {
+                interessesIds.add(interesse.getId());
+            }
+            dados.setInteressesIds(interessesIds);
+            if (!dados.getFotos().isEmpty()) {
+                for (FotoPessoa foto : dados.getFotos()) {
+                    // Simplificando para pegar sempre primeira foto caso tenha mais de uma
+                    dados.setArquivoFoto(foto.getNomeArquivo());
+                    break;
+                }
+            }
+            return Optional.of(dados);
+            }
+        return Optional.empty();
     }
 
     public Optional<DadosPessoais> findById(Integer id) {

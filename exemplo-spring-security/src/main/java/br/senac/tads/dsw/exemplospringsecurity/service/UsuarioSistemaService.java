@@ -10,23 +10,24 @@ import br.senac.tads.dsw.exemplospringsecurity.dominio.UsuarioSistema;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class UsuarioSistemaService implements UserDetailsService {
 
     private final Map<String, UsuarioSistema> usuariosCadastrados = new LinkedHashMap<>();
-    
-//    private PasswordEncoder passwordEncoder;
-//    
-//    public UsuarioSistemaService(PasswordEncoder passwordEncoder) {
-//        this.passwordEncoder = passwordEncoder;
-//    }
+
+    private PasswordEncoder passwordEncoder;
+
+    public UsuarioSistemaService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     private String gerarHashSenha(String senhaAberta) {
-        // return passwordEncoder.encode(senhaAberta);
+        return passwordEncoder.encode(senhaAberta);
 
         // ***** VERSÃO INICIAL: RETORNANDO SENHA ABERTA - NÃO USAR EM PROJETOS REAIS
-        return senhaAberta;
+        // return senhaAberta;
     }
 
     @PostConstruct

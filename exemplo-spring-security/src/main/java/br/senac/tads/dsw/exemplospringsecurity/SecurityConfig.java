@@ -2,6 +2,7 @@ package br.senac.tads.dsw.exemplospringsecurity;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -10,6 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true
+)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static PasswordEncoder plainPasswordEncoder() {
@@ -49,9 +55,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/favicon/**", "/webjars/**", "/css/**", "/js/**", 
                             "/font/**", "/", "/index.html", "/h2-console/**").permitAll()
                     .antMatchers("/sessao/**").permitAll()
-                    .antMatchers("/protegido/peao").hasRole("PEAO") // OU .hasAuthority("ROLE_PEAO")
-                    .antMatchers("/protegido/fodon").hasRole("FODON")
-                    .antMatchers("/protegido/god").hasRole("GOD")
+                    //.antMatchers("/protegido/peao").hasRole("PEAO") // OU .hasAuthority("ROLE_PEAO")
+                    //.antMatchers("/protegido/fodon").hasRole("FODON")
+                    //.antMatchers("/protegido/god").hasRole("GOD")
                     .anyRequest().authenticated()
             .and()
                 .exceptionHandling()

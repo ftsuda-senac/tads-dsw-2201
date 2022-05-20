@@ -7,9 +7,12 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import br.senac.tads.dsw.exemplospringsecurity.dominio.Papel;
 import br.senac.tads.dsw.exemplospringsecurity.dominio.UsuarioSistema;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 @Service
-public class UsuarioSistemaService {
+public class UsuarioSistemaService implements UserDetailsService {
 
     private final Map<String, UsuarioSistema> usuariosCadastrados = new LinkedHashMap<>();
     
@@ -38,6 +41,12 @@ public class UsuarioSistemaService {
         usuariosCadastrados.put("professor",
                 new UsuarioSistema("professor", "Sergio Marquina", gerarHashSenha("abcd1234"),
                         Arrays.asList(new Papel("ROLE_PEAO"), new Papel("ROLE_GOD"))));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UsuarioSistema usuario = usuariosCadastrados.get(username);
+        return usuario;
     }
 
 }

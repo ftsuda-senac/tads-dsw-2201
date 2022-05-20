@@ -7,12 +7,14 @@ import br.senac.tads.dsw.exemplosspring.pessoas.Interesse;
 import br.senac.tads.dsw.exemplosspring.pessoas.InteresseRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,9 +38,9 @@ public class DadosPessoaisService {
         }
 
     }
-    
-    public Optional<DadosPessoais> findByApelido(String apelido) {
-        Optional<DadosPessoais> optDados = dadosPessoaisRepository.findByApelidoSQL(apelido);
+
+    public Optional<DadosPessoais> findById(Integer id) {
+        Optional<DadosPessoais> optDados = dadosPessoaisRepository.findById(id);
         if (optDados.isPresent()) {
             // OBS: Trecho abaixo pode ser substituido pelo handler @PostLoad na classe de entidade
             DadosPessoais dados = optDados.get();
@@ -55,12 +57,12 @@ public class DadosPessoaisService {
                 }
             }
             return Optional.of(dados);
-            }
+        }
         return Optional.empty();
     }
 
-    public Optional<DadosPessoais> findById(Integer id) {
-        Optional<DadosPessoais> optDados = dadosPessoaisRepository.findById(id);
+    public Optional<DadosPessoais> findByApelido(String apelido) {
+        Optional<DadosPessoais> optDados = dadosPessoaisRepository.findByApelidoSQL(apelido);
         if (optDados.isPresent()) {
             // OBS: Trecho abaixo pode ser substituido pelo handler @PostLoad na classe de entidade
             DadosPessoais dados = optDados.get();
@@ -108,7 +110,9 @@ public class DadosPessoaisService {
                 arquivoFoto = dados.getArquivoFoto();
             }
             Set<FotoPessoa> fotos = new LinkedHashSet<>();
-            fotos.add(new FotoPessoa(arquivoFoto, "Foto de " + dados.getNome()));
+            FotoPessoa foto = new FotoPessoa(arquivoFoto, "Foto de " + dados.getNome());
+            foto.setPessoa(dados);
+            fotos.add(foto);
             dados.setFotos(fotos);
 
             dados.setDataCadastro(LocalDateTime.now());
@@ -117,11 +121,17 @@ public class DadosPessoaisService {
         }
         // OBS: Trecho abaixo pode ser substituido pelos handlers @PrePersist
         // e/ou @PreMerge na classe de entidade
+        Set<DadosPessoais> pessoas = new HashSet<>();
+        pessoas.add(dados);
+
         Set<Interesse> interesses = new LinkedHashSet<>();
         for (Integer interesseId : dados.getInteressesIds()) {
             Optional<Interesse> optInteresse = interesseRepository.findById(interesseId);
             if (optInteresse.isPresent()) {
-                interesses.add(optInteresse.get());
+                Interesse interesse = optInteresse.get();
+                // Mapeamento bidirecional
+                interesse.setPessoas(pessoas);
+                interesses.add(interesse);
             }
         }
         dados.setInteresses(interesses);

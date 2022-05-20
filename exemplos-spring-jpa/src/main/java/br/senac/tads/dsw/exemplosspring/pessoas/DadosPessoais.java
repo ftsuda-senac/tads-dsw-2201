@@ -8,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -109,7 +110,11 @@ public class DadosPessoais {
 
     // "pessoa" é o nome do atributo na classe FotoPessoa
     // onde o @ManyToOne foi configurado - associação bidirecional
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pessoa")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pessoa",
+            cascade = CascadeType.PERSIST, orphanRemoval = true)
+    // CascadeType.PERSIST -> Salva informações da foto "automaticamente"
+    // no banco junto com dados da pessoa ao incluir
+    // orphanRemoval -> Remove fotos "automaticamente" ao excluir a pessoa
     // Usando Set ("tipo de List/ArrayList") que evita objetos repetidos
     private Set<FotoPessoa> fotos;
 
@@ -119,7 +124,7 @@ public class DadosPessoais {
 
     // NAO SALVAR DADOS ABAIXO - Utilitarios para funcionamento do cadastro
     @Transient
-    @NotEmpty
+    //@NotEmpty
     private List<Integer> interessesIds;
 
     @Transient

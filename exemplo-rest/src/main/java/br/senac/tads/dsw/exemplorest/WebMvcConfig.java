@@ -3,6 +3,7 @@ package br.senac.tads.dsw.exemplorest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,7 +17,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${app.imagem-url-prefix}")
     private String imagemUrlPrefix;
 
-    
     /**
      * Define uma URL para acessar um diretório contendo as imagens<br>
      * Criar o diretório configurado no sistema.<br>
@@ -27,9 +27,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(imagemUrlPrefix + "/**")
-                .addResourceLocations("file:///" + imagemPath);   
+                .addResourceLocations("file:///" + imagemPath);
     }
-    
+
     /**
      * Redireciona uma requisição de / ou /index.html para um template
      * espeficicado<br>
@@ -42,6 +42,22 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addViewController("/").setViewName("index-template.html");
         registry.addViewController("/index.html").setViewName("index-template.html");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
+
+    /**
+     * Configuração do CORS
+     *
+     * @param registry
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/rest/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD")
+                .allowedHeaders("*")
+                // .exposedHeaders("header1", "header2")
+                //.allowCredentials(true) // Não funciona em conjunto com Allowed-origins *
+                .maxAge(3600); // 1 hora
     }
 
 }

@@ -306,6 +306,48 @@
                 // 1) PEGAR DADOS PREENCHIDOS DO FORMULARIO
                 // 2) MONTAR OBJETO JSON
                 // 3) ENVIAR USANDO AJAX (POST OU PUT)
+                
+                // Percorre checkboxes dos interesse para pegar valores selecionados
+                const interesses = document.querySelectorAll('[name="interessesIds"]');
+                const interessesIdsArr = [];
+                for (const opcao of interesses) {
+                    if (opcao.checked) {
+                        interessesIdsArr.push(+opcao.value); // Adiciona ID numerico selecionado no array
+                    }
+                }
+                
+                const dadosJSONParaSalvar = {
+                    id: idPessoa,
+                    nome: form.nome.value,
+                    apelido: form.apelido.value,
+                    descricao: form.descricao.value,
+                    dataNascimento: form.dataNascimento.value,
+                    email: form.email.value,
+                    telefone: form.telefone.value,
+                    senha: form.senha.value,
+                    senhaRepetida: form.senhaRepetida.value,
+                    numero: +form.numero.value,
+                    altura: +form.altura.value,
+                    peso: +form.peso.value,
+                    genero: +form.genero.value,
+                    interessesIds: interessesIdsArr
+                };
+                console.log(JSON.stringify(dadosJSONParaSalvar));
+                
+                const xhr = new XMLHttpRequest();
+                if (idPessoa) {
+                    xhr.open('PUT', '/rest/pessoas/' + idPessoa, true)
+                } else {
+                    xhr.open('POST', '/rest/pessoas', true)
+                }
+                xhr.setRequestHeader('Content-type', 'application/json');
+                xhr.setRequestHeader('Accept', 'application/json');
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 400) {
+                        alert(xhr.status + '\r\nLocation: ' + xhr.getResponseHeader('Location'));
+                    }
+                }
+                xhr.send(JSON.stringify(dadosJSONParaSalvar));
 
             }
 

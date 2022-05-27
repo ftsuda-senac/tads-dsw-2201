@@ -1,0 +1,11 @@
+EXPRESSION#>System.out.println("Teste");
+EXPRESSION#>exit
+EXPRESSION#>quit
+EXPRESSION#>System.exit(0);
+CMD#>/exit
+EXPRESSION#>System.out.println("Teste");
+EXPRESSION#>exit
+EXPRESSION#>quit
+EXPRESSION#>System.exit(0);
+CMD#>/exit
+CMD#>/exit

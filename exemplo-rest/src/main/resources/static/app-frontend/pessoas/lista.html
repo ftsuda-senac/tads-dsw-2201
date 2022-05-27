@@ -155,8 +155,6 @@
                 const bsModal = bootstrap.Modal.getInstance(document.getElementById('modalExcluir'));
                 bsModal.hide(); // Fecha modal
                 alert(msg);
-
-
             }
 
             function obterHtmlStatus(cadastroAtivo) {
@@ -232,6 +230,24 @@
                 // 1) CARREGAR DADOS
                 // 2) MOSTRAR DADOS NA TABELA
                 // 3) ATUALIZAR BOTÕES DE PAGINAÇÃO
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', '/rest/pessoas?page=' + pagina + '&qtde=' + qtde, true);
+                xhr.onload = function() {
+                    if (xhr.status >= 200  && xhr.status < 400) {
+                        
+                        const dadosTabela = document.getElementById('dadosTabela');
+                        // Limpa conteúdo atual
+                        dadosTabela.innerHTML = '';
+                        const dadosJSON = JSON.parse(xhr.responseText);
+                        for (const item of dadosJSON.content) {
+                            dadosTabela.insertAdjacentHTML('beforeend', montarLinhaTabela(item));
+                        }
+                        
+                        // Atualizar botões de paginação
+                        ajustarPaginacao(dadosJSON);
+                    }
+                };
+                xhr.send();
             }
 
             // ready- Função que chama a function definida quando ocorre o evento
